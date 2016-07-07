@@ -1,0 +1,117 @@
+<head>
+  <title>JustEatSimulator</title>
+
+    <meta name="viewport" content="initial-scale=1.0">
+    <meta charset="utf-8">
+    <style>
+        .map-container {
+            width: 80%;
+            height: 350px;
+            margin-left: 0px;
+            margin-right: 40px;
+            margin-bottom: 40px;
+        }
+        .map-marker-label{
+            position: absolute;
+            color: blue;
+            font-size: 9px;
+            font-weight: bold;
+            visibility: hidden;
+        }    </style>
+</head>
+
+<body style="margin-left:40px;">
+  <h1>Restaurant Simulator</h1>
+  {{> summary }}
+  {{> map }}
+  {{> hello}}
+
+</body>
+
+<template name="summary">
+    <div>
+        <span>Call center calls: {{overdue_orders}}</span>
+        <span>|</span>
+        <span>Cancelled orders: {{cancelled_orders}}</span>
+        <span>|</span>
+        <span>Total orders: {{total_orders}}</span>
+    </div>
+    <div class="row">
+        <input type="checkbox" name="showLabels" unchecked>Show Labels
+    </div>
+
+</template>
+
+<template name="map">
+    <div class="map-container">
+        {{> googleMap name="map" options=mapOptions}}
+    </div>
+</template>
+
+<template name="hello">
+    <select id="restaurant-select">
+        <option disabled="disabled" selected="selected">Please Select</option>
+        {{#each my_restaurants}}
+            <option value="{{this._id}}">{{this.name}}</option>
+        {{/each}}
+    </select>
+    <p>Menu: {{restaurant_menu}}, Reputation: {{reputation}}, Price: {{price}}, Estimated Delivery: {{estimated_delivery}}</p>
+    <p>Status: {{restaurant_status}}</p>
+    <p>Delivered Orders: {{delivered_order_count}}</p>
+    <p>Cancelled orders: {{cancelled_order_count}}</p>
+    <p>Pending orders: </p>
+    <ul>
+        {{#each my_orders}}
+            <li>
+                <button data-order="{{_id}}" class="accept" >Accept</button>
+                <button data-order="{{_id}}" class="reject">Reject</button>
+                {{order_date}}-{{menu}}
+            </li>
+        {{/each}}
+    </ul>
+    <p>Current accepted order count: {{kitchen_queue_count}}</p>
+    <!--<ul>-->
+        <!--{{#each accepted_orders}}-->
+            <!--<li value="{{_id}}">{{_id}}</li>-->
+        <!--{{/each}}-->
+    <!--</ul>-->
+    <p>Chefs</p>
+    <ul>
+        {{#each my_chefs}}
+            <li value="{{_id}}">{{name}}---{{chef_current_order(_id)}}</li>
+        {{/each}}
+    </ul>
+
+    <p>Waiting for delivery: </p>
+    <ul>
+        {{#each delivery_orders}}
+            <li value="{{_id}}">{{_id}}</li>
+        {{/each}}
+    </ul>
+    <p>Orders in transit</p>
+    <ul>
+        {{#each transit_orders_for_driver}}
+            <li value="{{_id}}">{{_id}}</li>
+        {{/each}}
+    </ul>
+    <ul>
+        {{#each my_drivers}}
+            <li value="{{_id}}">{{name}}---{{min_batch}}--{{busy}}</li>
+            <ul>
+                {{#each my_drivers_orders _id}}
+                    <li value="{{_id}}">{{_id}}</li>
+                {{/each}}
+            </ul>
+        {{/each}}
+    </ul>
+
+    <!--<ul>-->
+        <!--{{#each delivered_orders}}-->
+            <!--<li value="{{_id}}">{{_id}}</li>-->
+        <!--{{/each}}-->
+    <!--</ul>-->
+
+
+
+</template>
+
